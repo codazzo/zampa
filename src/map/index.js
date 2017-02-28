@@ -10,7 +10,6 @@ import './index.css';
 
 const USE_CLUSTERING_INITIALLY = true;
 
-let map;
 let markers = [];
 
 const getMarkersFromTags = tags => tags.map((tag) => {
@@ -38,13 +37,13 @@ const getMarkers = (tags, useClustering) => {
   return tagMarkers;
 };
 
-const updateMap = (tags, useClustering) => {
+const updateMap = (map, tags, useClustering) => {
   markers.forEach(marker => map.removeLayer(marker));
   markers = getMarkers(tags, useClustering);
   markers.forEach(marker => map.addLayer(marker));
 };
 
-const addClusterControl = (useClusteringBoxed) => {
+const addClusterControl = (map, useClusteringBoxed) => {
   const clusterControl = L.control({position: 'topright'});
   clusterControl.onAdd = () => {
     const div = L.DomUtil.create('div', 'command');
@@ -66,7 +65,7 @@ const addClusterControl = (useClusteringBoxed) => {
 };
 
 export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-line
-  map = L.map('map', {
+  const map = L.map('map', {
     minZoom: 1,
     maxBounds: L.latLngBounds(L.latLng(-180, -180), L.latLng(180, 180)),
     maxBoundsViscosity: 1.0,
@@ -102,10 +101,10 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
 
   const useClustering = observable(USE_CLUSTERING_INITIALLY);
 
-  addClusterControl(useClustering);
+  addClusterControl(map, useClustering);
 
   autorun(() => {
     const tagsInRange = tagStore.tagsInRange.get();
-    updateMap(tagsInRange, useClustering.get());
+    updateMap(map, tagsInRange, useClustering.get());
   });
 };
