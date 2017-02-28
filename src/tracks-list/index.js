@@ -4,9 +4,9 @@ import './index.scss';
 
 const DEFAULT_ALBUM_ART_URL = '/images/default_album_art.png';
 
-const TracksTable = ({store}) => (
-  <div className="tracks-table-wrapper">
-    <ul className="tracks-table">
+const TracksList = ({store}) => (
+  <div className="tracks-list-wrapper">
+    <ul className="tracks-list">
       {store.tagsInRange.get().map(({
         track: {
           key,
@@ -32,8 +32,8 @@ const TracksTable = ({store}) => (
   </div>
 );
 
-TracksTable.propTypes = {
+TracksList.propTypes = {
   store: React.PropTypes.object.isRequired, //eslint-disable-line
 };
 
-export default observer(TracksTable);
+export default observer(TracksList);

@@ -5,7 +5,7 @@ import {autorun} from 'mobx';
 import fetchTags from './fetch-tags';
 import {renderTimeline} from './timeline';
 import {renderMap} from './map';
-import TracksTable from './tracks-table';
+import TracksList from './tracks-list';
 import tagStore from './tag-store';
 import formatDate from './util/format-date';
 
@@ -38,7 +38,7 @@ fetchTags().then((tags) => {
   });
 
   ReactDOM.render(
-    <TracksTable tags={tags} store={tagStore} />,
+    <TracksList tags={tags} store={tagStore} />,
     reactRoot,
   );
 });
