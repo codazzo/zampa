@@ -9,6 +9,7 @@ class TagStore {
       startDate: -Infinity,
       endDate: +Infinity,
       bounds: null,
+      selectedTag: null,
     });
   }
 
@@ -40,6 +41,10 @@ class TagStore {
 
   setBounds(bounds) {
     this.bounds = bounds;
+  }
+
+  setSelectedTag(tagId) {
+    this.selectedTag = this.tags.find(({tagid}) => tagid === tagId);
   }
 
   setDateRange(startDate, endDate) {

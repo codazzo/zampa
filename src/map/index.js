@@ -9,6 +9,7 @@ import tagStore from '../tag-store';
 import './index.css';
 
 const USE_CLUSTERING_INITIALLY = true;
+const SIZE_AROUND_SELECTED_TAG_IN_METERS = 5;
 
 let markers = [];
 
@@ -106,5 +107,18 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
   autorun(() => {
     const tagsInRange = tagStore.tagsInRange.get();
     updateMap(map, tagsInRange, useClustering.get());
+  });
+
+  autorun(() => {
+    const selectedTag = tagStore.selectedTag;
+
+    if (!selectedTag || !selectedTag.geolocation) {
+      return;
+    }
+
+    const {latitude, longitude} = selectedTag.geolocation;
+    const center = L.latLng(latitude, longitude);
+    const bounds = center.toBounds(SIZE_AROUND_SELECTED_TAG_IN_METERS);
+    map.fitBounds(bounds);
   });
 };

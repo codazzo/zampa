@@ -1,7 +1,11 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
 import React from 'react';
 import { observer } from 'mobx-react';
-import './index.scss';
 import formatDate from '../util/format-date';
+import tagStore from '../tag-store';
+
+import './index.scss';
 
 const DEFAULT_ALBUM_ART_URL = '/images/default_album_art.png';
 
@@ -9,6 +13,7 @@ const TracksList = ({store}) => (
   <div className="tracks-list-wrapper">
     <ul className="tracks-list">
       {store.tagsInRange.get().map(({
+        tagid,
         timestamp,
         track: {
           key,
@@ -19,7 +24,7 @@ const TracksList = ({store}) => (
           images,
         },
       }, i) => (
-        <li key={i}>
+        <li key={i} onClick={() => tagStore.setSelectedTag(tagid)}>
           <img src={images.default || DEFAULT_ALBUM_ART_URL} alt="Album cover" />
           <div className="track-title">
             {title}
