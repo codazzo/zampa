@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import './index.css';
+import './index.scss';
 
 const TracksTable = ({store}) => (
   <div className="tracks-table-wrapper">

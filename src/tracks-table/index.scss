@@ -1,0 +1,13 @@
+.tracks-table-wrapper {
+  overflow: auto;
+
+  tr:hover {
+    cursor: pointer;
+  }
+
+  td img {
+    width: 50px;
+    height: 50px;
+    float: left;
+  }
+}
