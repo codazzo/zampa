@@ -1,14 +1,15 @@
 /* globals L: true */
 
 import $ from 'jquery';
-import {autorun} from 'mobx';
+import {autorun, observable} from 'mobx';
 import popupView from './popupView';
 import getVideoUrlForTag from '../get-video-url-for-tag';
 import tagStore from '../tag-store';
 
 import './index.css';
 
-let USE_CLUSTERING = true; // FIXME use observable
+const USE_CLUSTERING_INITIALLY = true;
+
 let map;
 let markers = [];
 
@@ -25,10 +26,10 @@ const getMarkersFromTags = tags => tags.map((tag) => {
 })
 .filter(Boolean);
 
-const getMarkers = (tags) => {
+const getMarkers = (tags, useClustering) => {
   const tagMarkers = getMarkersFromTags(tags);
 
-  if (USE_CLUSTERING) {
+  if (useClustering) {
     const clusterGroup = L.markerClusterGroup();
     tagMarkers.forEach(marker => clusterGroup.addLayer(marker));
     return [clusterGroup];
@@ -37,20 +38,20 @@ const getMarkers = (tags) => {
   return tagMarkers;
 };
 
-const updateMap = (tags) => {
+const updateMap = (tags, useClustering) => {
   markers.forEach(marker => map.removeLayer(marker));
-  markers = getMarkers(tags);
+  markers = getMarkers(tags, useClustering);
   markers.forEach(marker => map.addLayer(marker));
 };
 
-const addClusterControl = () => {
+const addClusterControl = (useClusteringBoxed) => {
   const clusterControl = L.control({position: 'topright'});
   clusterControl.onAdd = () => {
     const div = L.DomUtil.create('div', 'command');
 
     div.innerHTML = `
       <form class="cluster-control">
-        <input id="command" type="checkbox" ${USE_CLUSTERING ? 'checked' : ''}/>
+        <input id="command" type="checkbox" ${useClusteringBoxed.get() ? 'checked' : ''}/>
         <label for="command">cluster</label>
       </form>`;
 
@@ -60,8 +61,7 @@ const addClusterControl = () => {
   clusterControl.addTo(map);
 
   document.getElementById('command').addEventListener('click', () => {
-    USE_CLUSTERING = !USE_CLUSTERING;
-    updateMap();
+    useClusteringBoxed.set(!useClusteringBoxed.get());
   });
 };
 
@@ -100,10 +100,12 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
     onBoundsChanged(map.getBounds());
   });
 
-  addClusterControl(map);
+  const useClustering = observable(USE_CLUSTERING_INITIALLY);
+
+  addClusterControl(useClustering);
 
   autorun(() => {
     const tagsInRange = tagStore.tagsInRange.get();
-    updateMap(tagsInRange);
+    updateMap(tagsInRange, useClustering.get());
   });
 };
