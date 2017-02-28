@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import './index.scss';
+import formatDate from '../util/format-date';
 
 const DEFAULT_ALBUM_ART_URL = '/images/default_album_art.png';
 
@@ -8,6 +9,7 @@ const TracksList = ({store}) => (
   <div className="tracks-list-wrapper">
     <ul className="tracks-list">
       {store.tagsInRange.get().map(({
+        timestamp,
         track: {
           key,
           heading: {
@@ -24,6 +26,9 @@ const TracksList = ({store}) => (
           </div>
           <div className="track-artist">
             {subtitle}
+          </div>
+          <div className="tag-timestamp">
+            {formatDate(new Date(timestamp))}
           </div>
           <div className="clear" />
         </li>
