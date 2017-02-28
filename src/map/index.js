@@ -14,7 +14,7 @@ const SIZE_AROUND_SELECTED_TAG_IN_METERS = 5;
 let markers = [];
 
 const getMarkersFromTags = tags => tags.map((tag) => {
-  const {geolocation} = tag;
+  const {tagid, geolocation} = tag;
 
   if (!(geolocation && geolocation.longitude && geolocation.latitude)) {
     return null;
@@ -22,25 +22,31 @@ const getMarkersFromTags = tags => tags.map((tag) => {
 
   const {longitude, latitude} = geolocation;
 
-  return L.marker([latitude, longitude]).bindPopup(popupView(tag));
+  const marker = L.marker([latitude, longitude]).bindPopup(popupView(tag));
+  marker.tagid = tagid;
+
+  return marker;
 })
 .filter(Boolean);
 
-const getMarkers = (tags, useClustering) => {
-  const tagMarkers = getMarkersFromTags(tags);
+const updateMap = (map, tags, useClustering) => {
+  map.eachLayer((layer) => {
+    if (layer === map.tileLayer) {
+      return;
+    }
+    map.removeLayer(layer);
+  });
+
+  markers = getMarkersFromTags(tags);
 
   if (useClustering) {
     const clusterGroup = L.markerClusterGroup();
-    tagMarkers.forEach(marker => clusterGroup.addLayer(marker));
-    return [clusterGroup];
+    markers.forEach(marker => clusterGroup.addLayer(marker));
+    map.addLayer(clusterGroup);
+    map.clusterGroup = clusterGroup; // eslint-disable-line no-param-reassign
+    return;
   }
 
-  return tagMarkers;
-};
-
-const updateMap = (map, tags, useClustering) => {
-  markers.forEach(marker => map.removeLayer(marker));
-  markers = getMarkers(tags, useClustering);
   markers.forEach(marker => map.addLayer(marker));
 };
 
@@ -68,18 +74,19 @@ const addClusterControl = (map, useClusteringBoxed) => {
 export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-line
   const map = L.map('map', {
     minZoom: 1,
+    maxZoom: 18,
     maxBounds: L.latLngBounds(L.latLng(-180, -180), L.latLng(180, 180)),
     maxBoundsViscosity: 1.0,
   })
   .setView([0, 0], 1);
 
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  map.tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     noWrap: true,
   }).addTo(map);
 
   map.on('popupopen', (e) => {
-    const $wrapper = $(e.popup._wrapper); // eslint-disable-line no-underscore-dangle
+    const $wrapper = $(e.popup._wrapper);
     const $container = $wrapper.find('.track-container');
     const $titleAnchor = $container.find('.track-title');
 
@@ -120,5 +127,16 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
     const center = L.latLng(latitude, longitude);
     const bounds = center.toBounds(SIZE_AROUND_SELECTED_TAG_IN_METERS);
     map.fitBounds(bounds);
+
+    const markerForTag = markers.find(({tagid}) => tagid === selectedTag.tagid);
+    const isUsingClustering = useClustering.get();
+
+    if (isUsingClustering) {
+      map.clusterGroup.zoomToShowLayer(markerForTag, () => {
+        markerForTag.openPopup();
+      });
+    } else {
+      markerForTag.openPopup();
+    }
   });
 };
