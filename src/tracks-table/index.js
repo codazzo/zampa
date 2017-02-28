@@ -2,32 +2,33 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import './index.scss';
 
+const DEFAULT_ALBUM_ART_URL = '/images/default_album_art.png';
+
 const TracksTable = ({store}) => (
   <div className="tracks-table-wrapper">
-    <table className="tracks-table">
-      <tbody>
-        {store.tagsInRange.get().map(({
-          track: {
-            key,
-            heading: {
-              title,
-              subtitle,
-            },
-            images,
+    <ul className="tracks-table">
+      {store.tagsInRange.get().map(({
+        track: {
+          key,
+          heading: {
+            title,
+            subtitle,
           },
-        }, i) => (
-          <tr key={i}>
-            <td>
-              <img src={images.default} alt="Album cover" />
-              {title}
-              <br />
-              {subtitle}
-            </td>
-
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          images,
+        },
+      }, i) => (
+        <li key={i}>
+          <img src={images.default || DEFAULT_ALBUM_ART_URL} alt="Album cover" />
+          <div className="track-title">
+            {title}
+          </div>
+          <div className="track-artist">
+            {subtitle}
+          </div>
+          <div className="clear" />
+        </li>
+      ))}
+    </ul>
   </div>
 );
 

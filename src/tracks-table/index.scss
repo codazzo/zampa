@@ -1,13 +1,33 @@
 .tracks-table-wrapper {
   overflow: auto;
 
-  tr:hover {
-    cursor: pointer;
+  ul {
+    padding: 0;
   }
 
-  td img {
-    width: 50px;
-    height: 50px;
-    float: left;
+  li {
+    font-size: 12px;
+    list-style: none;
+    margin-bottom: 5px;
+
+    .clear {
+      clear: both;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    .track-title {
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      float: left;
+      margin-right: 4px;
+    }
   }
 }
