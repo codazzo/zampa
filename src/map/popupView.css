@@ -1,0 +1,46 @@
+.leaflet-popup-close-button{
+  color: rgba(255,255,255,0.8);
+  z-index: 10;
+}
+
+.leaflet-popup-content-wrapper {
+  background-size: contain;
+  padding: 0;
+  overflow: hidden
+}
+  .leaflet-popup-content-wrapper > .leaflet-popup-content {
+    margin: 0;
+  }
+
+    .leaflet-popup-content .track-title {
+      color: white;
+    }
+
+.track-container {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+  .track-container img {
+    width: 100%;
+  }
+
+  .track-container h4,
+  .track-container h3 {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    margin: 0;
+    padding: 10px 5px;
+    padding: 5px;
+    position: absolute;
+    width: 100%;
+  }
+
+  .track-container h3 {
+    top: 0;
+  }
+
+  .track-container h4 {
+    bottom: 0;
+    font-weight: normal;
+  }

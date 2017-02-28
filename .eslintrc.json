@@ -1,0 +1,18 @@
+{
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
+    ],
+    "rules": {
+        "react/jsx-filename-extension": "off",
+        "object-curly-spacing": "off",
+        "react/no-array-index-key": "off"
+    },
+    "globals": {
+        "fetch": true,
+        "$": true,
+        "document": true
+    }
+}
