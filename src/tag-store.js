@@ -6,8 +6,8 @@ class TagStore {
   constructor() {
     extendObservable(this, {
       tags: [],
-      startDate: -Infinity,
-      endDate: +Infinity,
+      startDate: new Date(0),
+      endDate: new Date(1000000000000000),
       bounds: null,
       selectedTag: null,
     });

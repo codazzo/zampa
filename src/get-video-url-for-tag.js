@@ -2,7 +2,7 @@ const getYoutubeURLFromID = id => `https://www.youtube.com/watch?v=${id}`;
 
 const fetchResponseFromLocalProxy = (videosUrl) => {
   const path = videosUrl.split('cdn.shazam.com/')[1];
-  const proxiedUrl = `http://localhost:3001/${path}`;
+  const proxiedUrl = `http://localhost:3001/api/${path}`;
   return fetch(proxiedUrl)
     .then(res => res.json());
 };

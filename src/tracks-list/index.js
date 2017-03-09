@@ -24,8 +24,12 @@ const TracksList = ({store}) => (
           images,
         },
       }, i) => (
-        <li key={i} onClick={() => tagStore.setSelectedTag(tagid)}>
-          <img src={images.default || DEFAULT_ALBUM_ART_URL} alt="Album cover" />
+        <li key={i}>
+          <img
+            onClick={() => tagStore.setSelectedTag(tagid)}
+            src={images.default || DEFAULT_ALBUM_ART_URL}
+            alt="Album cover"
+          />
           <div className="track-title">
             {title}
           </div>

@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {autorun} from 'mobx';
 
-import fetchTags from './fetch-tags';
+// import fetchTags from './fetch-tags';
+import LoginButton from './login-button';
 import {renderTimeline} from './timeline';
 import {renderMap} from './map';
 import TracksList from './tracks-list';
@@ -22,23 +23,51 @@ const renderDateRange = () => {
   });
 };
 
-fetchTags().then((tags) => {
-  tagStore.setTags(tags);
+autorun(() => {
+  const tags = tagStore.tags;
 
-  renderDateRange();
+  if (tags.length) {
+    renderDateRange();
 
-  renderMap({
-    onBoundsChanged: bounds => tagStore.setBounds(bounds),
-  });
+    renderMap({
+      onBoundsChanged: bounds => tagStore.setBounds(bounds),
+    });
 
-  renderTimeline({
-    tags,
-    selector: '.timeline-container',
-    onDateRangeChanged: (startDate, endDate) => tagStore.setDateRange(startDate, endDate),
-  });
+    renderTimeline({
+      tags,
+      selector: '.timeline-container',
+      onDateRangeChanged: (startDate, endDate) => tagStore.setDateRange(startDate, endDate),
+    });
 
-  ReactDOM.render(
-    <TracksList tags={tags} store={tagStore} />,
-    reactRoot,
-  );
+    ReactDOM.render(
+      <TracksList tags={tags} store={tagStore} />,
+      reactRoot,
+    );
+  } else {
+    ReactDOM.render(
+      <LoginButton store={tagStore} />,
+      reactRoot,
+    );
+  }
 });
+
+// fetchTags().then((tags) => {
+//   tagStore.setTags(tags);
+
+//   renderDateRange();
+
+//   renderMap({
+//     onBoundsChanged: bounds => tagStore.setBounds(bounds),
+//   });
+
+//   renderTimeline({
+//     tags,
+//     selector: '.timeline-container',
+//     onDateRangeChanged: (startDate, endDate) => tagStore.setDateRange(startDate, endDate),
+//   });
+
+//   ReactDOM.render(
+//     <TracksList tags={tags} store={tagStore} />,
+//     reactRoot,
+//   );
+// });
