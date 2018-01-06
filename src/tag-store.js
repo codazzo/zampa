@@ -56,7 +56,7 @@ class TagStore {
   }
 
   setTags(tags) {
-    this.tags = tags;
+    this.tags = tags.reverse();
     const timestamps = tags.map(({timestamp}) => timestamp);
     Object.assign(this, {
       startDate: new Date(Math.min.apply(null, timestamps)),
