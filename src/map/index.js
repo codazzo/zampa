@@ -86,11 +86,10 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
     noWrap: true,
   }).addTo(map);
 
-  map.on('popupopen', (e) => {
+  map.on('popupopen', async (e) => {
     const $wrapper = $(e.popup._wrapper);
     const $container = $wrapper.find('.track-container');
-    const $titleAnchor = $container.find('.track-title');
-
+    const $playVideoLink = $wrapper.find('.play-video');
     const imgUrl = $container.data('img');
     const tagId = $container.data('tagId');
     $wrapper.css({
@@ -99,8 +98,20 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
 
     const tag = tagStore.findTagById(tagId);
 
-    getVideoUrlForTag(tag).then((url) => {
-      $titleAnchor.attr('href', url);
+    const url = await getVideoUrlForTag(tag);
+    const videoID = url.split('?v=')[1];
+
+    $playVideoLink.on('click', () => {
+      $container.replaceWith(`
+        <iframe
+          width="200"
+          height="200"
+          src="https://www.youtube.com/embed/${videoID}"
+          frameborder="0"
+          allow="autoplay;
+          encrypted-media"
+        ></iframe>
+      `);
     });
   });
 

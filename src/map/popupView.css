@@ -16,6 +16,20 @@
       color: white;
     }
 
+    .leaflet-popup-content .play-video {
+      visibility: hidden;
+      width: calc(100% + 2px);
+      font-size: 160px;
+      text-align: center;
+      position: absolute;
+      color: white;
+    }
+    .leaflet-popup-content:hover .play-video {
+      cursor: pointer;
+      visibility: visible;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
 .track-container {
   width: 200px;
   height: 200px;
