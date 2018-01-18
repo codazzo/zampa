@@ -18,7 +18,7 @@ const msgDiv = document.getElementById('msg');
 const renderDateRange = () => {
   autorun(() => {
     const [startDate, endDate] = tagStore.getDateRange();
-    msgDiv.innerHTML = `Showing tracks between ${formatDate(startDate)} - ${formatDate(endDate)}`;
+    msgDiv.innerHTML = `${formatDate(startDate)} 👉 ${formatDate(endDate)}`;
   });
 };
 

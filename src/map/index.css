@@ -1,3 +1,9 @@
+.leaflet-top.leaflet-right {
+  left: 12px;
+  top: 80px;
+  right: initial;
+}
+
 .cluster-control {
   padding: 5px;
   background: white;

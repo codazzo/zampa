@@ -78,7 +78,8 @@ export const renderMap = ({onBoundsChanged = () => {}}) => { //eslint-disable-li
     maxBounds: L.latLngBounds(L.latLng(-180, -180), L.latLng(180, 180)),
     maxBoundsViscosity: 1.0,
   })
-  .setView([0, 0], 1);
+  .setView([52.50697, 13.4], 11);
+
 
   map.tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',

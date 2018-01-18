@@ -1,7 +1,10 @@
 .tracks-list-wrapper {
-  overflow: auto;
+  width: 300px;
+  background: rgba(255,255,255,0.8);
 
-  ul {
+  ul.tracks-list {
+    margin-top: 0;
+    margin-bottom: 15px;
     padding: 0;
   }
 
@@ -9,6 +12,10 @@
     font-size: 12px;
     list-style: none;
     margin-bottom: 5px;
+    padding-left: 5px;
+    padding-top: 1px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
 
     .clear {
       clear: both;
@@ -18,7 +25,13 @@
       cursor: pointer;
     }
 
+    .track-artist {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .track-title {
+      white-space: nowrap;
       font-weight: 600;
     }
 
@@ -30,6 +43,7 @@
     }
 
     .tag-timestamp {
+      margin-top: 9px;
       color: #999;
     }
   }
